@@ -1,5 +1,6 @@
 .first-canvas {
   border: solid black 1px;
+  background-image: url(../images/background/back.png);
 }
 
 .canvas-container {

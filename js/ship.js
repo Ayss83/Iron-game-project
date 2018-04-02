@@ -4,6 +4,12 @@ const shipTypes = Object.freeze({
   hestar: 3
 });
 
+const shootTypes = Object.freeze({
+  blue: 1,
+  red: 2,
+  green: 3
+});
+
 /**
  * Constructor function to create ships
  * 
@@ -22,12 +28,11 @@ function Ship(type) {
       this.xSpeed = 0;
       this.ySpeed = 0;
       this.maxSpeed = 7;
-      this.shootType = "";
-      this.shootBaseDmg = 15;
-      this.steering = 2;
-      this.acceleration = 3;
+      this.shootType = shootTypes.blue;
+      this.steering = 3.4;
+      this.acceleration = 0.6;
       this.image = new Image();
-      this.image.src = "./images/Spaceship-Drakir7.png";
+      this.image.src = "./images/ships/drakir.png";
       break;
 
     case shipTypes.hestar: 
@@ -41,12 +46,11 @@ function Ship(type) {
       this.currentSpeed = 0;
       this.xSpeed = 0;
       this.ySpeed = 0;
-      this.shootType = "";
-      this.shootBaseDmg = 11;
+      this.shootType = shootTypes.red;
       this.steering = 0.8;
       this.acceleration = 3;
       this.image = new Image();
-      this.image.src = "./images/ospaceship-main.png";
+      this.image.src = "./images/ships/hestar.png";
       break;
 
       case shipTypes.terran: 
@@ -60,12 +64,11 @@ function Ship(type) {
       this.currentSpeed = 0;
       this.xSpeed = 0;
       this.ySpeed = 0;
-      this.shootType = "";
-      this.shootBaseDmg = 11;
+      this.shootType = shootTypes.green;
       this.steering = 0.8;
       this.acceleration = 3;
       this.image = new Image();
-      this.image.src = "./images/blueships1.png";
+      this.image.src = "./images/ships/terran.png";
       break;
 
     default:
@@ -83,6 +86,9 @@ Ship.prototype.drawMe = function() {
   ctx.restore();
 } 
 
+/**
+ * Makes the ship moves depending on its direction and speed
+ */
 Ship.prototype.movement = function() {
   let convertedDeg; //degrees converted to remain between 0 and 90
   let xPart;  //percentage of speed allowed to x axis movement
@@ -92,48 +98,57 @@ Ship.prototype.movement = function() {
     convertedDeg = this.degrees - 90;
     xPart = (90 - convertedDeg) / 90;
     yPart = convertedDeg / 90;
-    if(Math.abs(this.xSpeed) + Math.abs(this.ySpeed) < this.maxSpeed) {
-      this.xSpeed = -this.currentSpeed * xPart;
-      this.ySpeed = -this.currentSpeed * yPart;
-    } else {
-      this.xSpeed = -this.maxSpeed * xPart;
-      this.ySpeed = -this.maxSpeed * yPart;
-    }
+    
+    this.xSpeed = -this.currentSpeed * xPart;
+    this.ySpeed = -this.currentSpeed * yPart;
+
   } else if (this.degrees > 180 && this.degrees <= 270) {
     convertedDeg = this.degrees - 180;
     xPart = convertedDeg / 90;
     yPart = (90 - convertedDeg) / 90;
-    if(Math.abs(this.xSpeed) + Math.abs(this.ySpeed) < this.maxSpeed) {
-      this.xSpeed = this.currentSpeed * xPart;
-      this.ySpeed = -this.currentSpeed * yPart;
-    } else {
-      this.xSpeed = this.maxSpeed * xPart;
-      this.ySpeed = -this.maxSpeed * yPart;
-    }
+
+    this.xSpeed = this.currentSpeed * xPart;
+    this.ySpeed = -this.currentSpeed * yPart;
+  
   } else if (this.degrees > 270 && this.degrees <= 360) {
     convertedDeg = this.degrees - 270; 
     xPart = (90 - convertedDeg) / 90;
     yPart = convertedDeg / 90;
-    if(Math.abs(this.xSpeed) + Math.abs(this.ySpeed) < this.maxSpeed) {
-      this.xSpeed = this.currentSpeed * xPart;
-      this.ySpeed = this.currentSpeed * yPart;
-    } else {
-      this.xSpeed = this.maxSpeed * xPart;
-      this.ySpeed = this.maxSpeed * yPart;
-    }
+
+    this.xSpeed = this.currentSpeed * xPart;
+    this.ySpeed = this.currentSpeed * yPart;
+   
   } else {
     convertedDeg = this.degrees;
     xPart = convertedDeg / 90;
     yPart = (90 - convertedDeg) / 90;
-    if(Math.abs(this.xSpeed) + Math.abs(this.ySpeed) < this.maxSpeed) {
-      this.xSpeed = -this.currentSpeed * xPart;
-      this.ySpeed = this.currentSpeed * yPart;
-    } else {
-      this.xSpeed = -this.maxSpeed * xPart;
-      this.ySpeed = this.maxSpeed * yPart;
-    }
+
+    this.xSpeed = -this.currentSpeed * xPart;
+    this.ySpeed = this.currentSpeed * yPart;
   }
-  
+  this.boundaryBounce();
   this.x += this.xSpeed;
   this.y += this.ySpeed;
+}
+
+/**
+ * Avoid the ship from wandering outside of canvas
+ */
+Ship.prototype.boundaryBounce = function () {
+  if(this.x <= 0 + this.width/2) {
+    this.x = 0 + this.width/2;
+  }
+  if(this.x >= canvas.width - this.width/2) {
+    this.x = canvas.width - this.width/2;
+  }
+  if(this.y <= 0 + this.height/2) {
+    this.y = 0 + this.height/2;
+  }
+  if(this.y >= canvas.height - this.height/2) {
+    this.y = canvas.height - this.height/2;
+  }
+}
+
+Ship.prototype.shooting = function() {
+  gameObjects.push(new Shoot(this.shootType, this.x, this.y, this.degrees));
 }

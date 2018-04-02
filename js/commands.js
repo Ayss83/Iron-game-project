@@ -3,6 +3,7 @@ var body = document.querySelector("body");
 body.onkeydown = function() {
   switch(event.keyCode) {
     case 90: // Z key
+    case 87: // W key for qwerty keyboards
       if(player.currentSpeed + player.acceleration < player.maxSpeed) {
         player.currentSpeed += player.acceleration;
       } else {
@@ -16,10 +17,10 @@ body.onkeydown = function() {
       } else {
         player.currentSpeed = 0;
       }
-      console.log(player.currentSpeed);
       break;
 
     case 81: // Q key
+    case 65: // A key for qwerty keyboards
       if (player.degrees > 0) {
         player.degrees -= player.steering;
       } else {
@@ -33,6 +34,14 @@ body.onkeydown = function() {
       } else {
         player.degrees += player.steering;
       }
+      break;
+  }
+}
+
+body.onkeyup = function() {
+  switch(event.keyCode) {
+    case 13:
+      player.shooting();
       break;
   }
 }
