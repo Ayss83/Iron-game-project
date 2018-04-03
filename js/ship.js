@@ -38,7 +38,7 @@ function Ship(type) {
     case shipTypes.hestar: 
       this.HP = 250;
       this.x = 600;
-      this.y = 300;
+      this.y = 270;
       this.width = 114;
       this.height = 86;
       this.degrees = 0;
@@ -59,7 +59,7 @@ function Ship(type) {
       this.y = 300;
       this.width = 114;
       this.height = 84;
-      this.degrees = 0;
+      this.degrees = 200;
       this.maxSpeed = 6.5;
       this.currentSpeed = 0;
       this.xSpeed = 0;

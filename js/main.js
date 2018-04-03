@@ -7,13 +7,34 @@ canvas.height = window.innerHeight - 20;
 
 let player = new Ship(shipTypes.drakir);
 gameObjects.push(player);
+let adversary = new Ship(shipTypes.terran);
+adversary.AI = new AI(adversary);
+gameObjects.push(adversary);
+let adversary2 = new Ship(shipTypes.hestar);
+adversary2.AI = new AI(adversary2);
+gameObjects.push(adversary2);
 
 function refresh() {
   ctx.clearRect(0,0, canvas.width, canvas.height);
   
-  gameObjects.forEach(element => {
+  gameObjects.forEach((element, index) => {
+    if(element !== player && !(element instanceof Shoot) && element === adversary) {
+      element.AI.targeting();
+      element.AI.orient();
+    }
+
     element.drawMe();
     element.movement();
+
+    // getting rid of shoots which went out of canvas
+    if(element instanceof Shoot && 
+      (element.x <= 0 || 
+        element.x >= canvas.width + element.width || 
+        element.y <= 0 || 
+        element.y >= canvas.height + element.height)
+      ) {
+        gameObjects.splice(index, 1);
+    }
   });
 
 
