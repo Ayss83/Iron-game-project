@@ -24,6 +24,20 @@ function refresh() {
       // element.AI.move();
     }
 
+    if(element instanceof Ship && element.HP <= 0) {
+      gameObjects.splice(index, 1);
+    }
+
+    if(element instanceof Shoot) {
+      gameObjects.forEach(aShip => {
+        if(aShip instanceof Ship && aShip !== element.firingShip) {
+          if(element.collision(aShip)) {
+            gameObjects.splice(index, 1);
+          }
+        }
+      });
+    }
+
     element.drawMe();
     element.movement();
 

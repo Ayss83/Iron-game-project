@@ -154,8 +154,8 @@ Ship.prototype.boundaryBounce = function () {
 
 Ship.prototype.shooting = function(shipType, source) {
   if(shipType === shipTypes.drakir) {
-    gameObjects.push(new Shoot(this.shootType, this.x, this.y, this.degrees-90, source));
+    gameObjects.push(new Shoot(this.shootType, this.x, this.y, this.degrees-90, source, this));
   } else if(shipType === shipTypes.terran || shipType === shipTypes.hestar) {
-    gameObjects.push(new Shoot(this.shootType, this.x, this.y, this.degrees-90, source));  
+    gameObjects.push(new Shoot(this.shootType, this.x, this.y, this.degrees-90, source, this));  
   }
 }

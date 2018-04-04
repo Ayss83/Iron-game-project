@@ -1,7 +1,8 @@
-function Shoot(shootType, x, y, degrees, source) {
+function Shoot(shootType, x, y, degrees, source, firingShip) {
   this.x = x;
   this.y = y;
-  this.source = source
+  this.source = source;
+  this.firingShip = firingShip;
   this.xSpeed = 0;
   this.ySpeed = 0;
   this.degrees = degrees;
@@ -106,4 +107,14 @@ Shoot.prototype.movement = function() {
 
   this.x += this.xSpeed;
   this.y += this.ySpeed;
+}
+
+Shoot.prototype.collision = function(ship) {
+  if(this.y + this.height >= ship.y && 
+      this.y <= ship.y + ship.height && 
+      this.x + this.width >= ship.x &&
+      this.x <= ship.x + ship.width) {
+        ship.HP -= this.shootBaseDmg;
+        return true;
+      }
 }
