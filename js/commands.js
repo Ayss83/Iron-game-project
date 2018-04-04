@@ -41,7 +41,7 @@ body.onkeydown = function() {
 body.onkeyup = function() {
   switch(event.keyCode) {
     case 13:
-      player.shooting();
+      player.shooting(player.shipType, "player");
       break;
   }
 }

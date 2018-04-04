@@ -1,6 +1,7 @@
-function Shoot(shootType, x, y, degrees) {
+function Shoot(shootType, x, y, degrees, source) {
   this.x = x;
   this.y = y;
+  this.source = source
   this.xSpeed = 0;
   this.ySpeed = 0;
   this.degrees = degrees;
@@ -34,38 +35,75 @@ Shoot.prototype.movement = function() {
   let convertedDeg;
   let xPart;
   let yPart;
-
-  if(this.degrees > 90 && this.degrees <= 180) {
-    convertedDeg = this.degrees - 90;
-    xPart = (90 - convertedDeg) / 90;
-    yPart = convertedDeg / 90;
-
-    this.xSpeed = -this.velocity * xPart;
-    this.ySpeed = - this.velocity * yPart;
-
-  } else if (this.degrees > 180 && this.degrees <= 270) {
-    convertedDeg = this.degrees - 180;
-    xPart = convertedDeg / 90;
-    yPart = (90 - convertedDeg) / 90;
-
-    this.xSpeed = this.velocity * xPart;
-    this.ySpeed = -this.velocity * yPart;
   
-  } else if (this.degrees > 270 && this.degrees <= 360) {
-    convertedDeg = this.degrees - 270; 
-    xPart = (90 - convertedDeg) / 90;
-    yPart = convertedDeg / 90;
-
-    this.xSpeed = this.velocity * xPart;
-    this.ySpeed = this.velocity * yPart;
-   
+  if(this.source == "player") {
+    if(this.degrees > 90 && this.degrees <= 180) {
+      convertedDeg = this.degrees - 90;
+      xPart = (90 - convertedDeg) / 90;
+      yPart = convertedDeg / 90;
+  
+      this.xSpeed = -this.velocity * xPart;
+      this.ySpeed = - this.velocity * yPart;
+  
+    } else if (this.degrees > 180 && this.degrees <= 270) {
+      convertedDeg = this.degrees - 180;
+      xPart = convertedDeg / 90;
+      yPart = (90 - convertedDeg) / 90;
+  
+      this.xSpeed = this.velocity * xPart;
+      this.ySpeed = -this.velocity * yPart;
+    
+    } else if (this.degrees > 270 && this.degrees <= 360) {
+      convertedDeg = this.degrees - 270; 
+      xPart = (90 - convertedDeg) / 90;
+      yPart = convertedDeg / 90;
+  
+      this.xSpeed = this.velocity * xPart;
+      this.ySpeed = this.velocity * yPart;
+     
+    } else {
+      convertedDeg = this.degrees;
+      xPart = convertedDeg / 90;
+      yPart = (90 - convertedDeg) / 90;
+  
+      this.xSpeed = -this.velocity * xPart;
+      this.ySpeed = this.velocity * yPart;
+    }
   } else {
-    convertedDeg = this.degrees;
-    xPart = convertedDeg / 90;
-    yPart = (90 - convertedDeg) / 90;
-
-    this.xSpeed = -this.velocity * xPart;
-    this.ySpeed = this.velocity * yPart;
+    if(this.degrees >= 0 && this.degrees <= 90) {
+      convertedDeg = this.degrees;
+      xPart = (90 - convertedDeg) / 90;
+      yPart = convertedDeg / 90;
+      console.log(xPart + " xPart");
+      console.log(yPart + " yPart");
+  
+      this.xSpeed = this.velocity * xPart;
+      this.ySpeed = this.velocity * yPart;
+  
+    } else if (this.degrees > 90 && this.degrees <= 180) {
+      convertedDeg = this.degrees - 90;
+      xPart = convertedDeg / 90;
+      yPart = (90 - convertedDeg) / 90;
+  
+      this.xSpeed = -this.velocity * xPart;
+      this.ySpeed = this.velocity * yPart;
+    
+    } else if (this.degrees > 270 && this.degrees <= 360) {
+      convertedDeg = this.degrees - 270; 
+      xPart = (90 - convertedDeg) / 90;
+      yPart = convertedDeg / 90;
+  
+      this.xSpeed = this.velocity * xPart;
+      this.ySpeed = this.velocity * yPart;
+     
+    } else {
+      convertedDeg = this.degrees;
+      xPart = convertedDeg / 90;
+      yPart = (90 - convertedDeg) / 90;
+  
+      this.xSpeed = -this.velocity * xPart;
+      this.ySpeed = this.velocity * yPart;
+    }
   }
 
   this.x += this.xSpeed;

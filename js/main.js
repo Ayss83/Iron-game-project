@@ -18,7 +18,7 @@ function refresh() {
   ctx.clearRect(0,0, canvas.width, canvas.height);
   
   gameObjects.forEach((element, index) => {
-    if(element !== player && !(element instanceof Shoot) && element === adversary) {
+    if(element !== player && !(element instanceof Shoot)) {
       element.AI.targeting();
       element.AI.orient();
     }
@@ -44,3 +44,11 @@ function refresh() {
 }
 
 refresh();
+
+// setInterval(function() {
+//   gameObjects.forEach((element, index) => {
+//     if(element !== player && !(element instanceof Shoot) && element === adversary) {
+//       element.AI.shoot();
+//     }
+// })
+// }, 500);

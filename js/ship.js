@@ -28,6 +28,7 @@ function Ship(type) {
       this.xSpeed = 0;
       this.ySpeed = 0;
       this.maxSpeed = 7;
+      this.shipType = shipTypes.drakir;
       this.shootType = shootTypes.blue;
       this.steering = 3.4;
       this.acceleration = 0.6;
@@ -46,6 +47,7 @@ function Ship(type) {
       this.currentSpeed = 0;
       this.xSpeed = 0;
       this.ySpeed = 0;
+      this.shipType = shipTypes.hestar;
       this.shootType = shootTypes.red;
       this.steering = 0.8;
       this.acceleration = 3;
@@ -59,11 +61,12 @@ function Ship(type) {
       this.y = 300;
       this.width = 114;
       this.height = 84;
-      this.degrees = 200;
+      this.degrees = 0;
       this.maxSpeed = 6.5;
       this.currentSpeed = 0;
       this.xSpeed = 0;
       this.ySpeed = 0;
+      this.shipType = shipTypes.terran;
       this.shootType = shootTypes.green;
       this.steering = 0.8;
       this.acceleration = 3;
@@ -149,6 +152,10 @@ Ship.prototype.boundaryBounce = function () {
   }
 }
 
-Ship.prototype.shooting = function() {
-  gameObjects.push(new Shoot(this.shootType, this.x, this.y, this.degrees));
+Ship.prototype.shooting = function(shipType, source) {
+  if(shipType === shipTypes.drakir) {
+    gameObjects.push(new Shoot(this.shootType, this.x, this.y, this.degrees, source));
+  } else if(shipType === shipTypes.terran || shipType === shipTypes.hestar) {
+    gameObjects.push(new Shoot(this.shootType, this.x, this.y, this.degrees-90, source));  
+  }
 }
