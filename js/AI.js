@@ -50,6 +50,16 @@ AI.prototype.orient = function() {
   }
 }
 
+AI.prototype.move = function() {
+  let distance = Math.sqrt((this.target.x - this.ship.x) ** 2 + (this.target.y - this.ship.y) ** 2);
+
+  if(distance > 200 && this.ship.currentSpeed < this.ship.maxSpeed) {
+    this.ship.currentSpeed += this.ship.acceleration;
+  } else if(distance < 200 && this.ship.currentSpeed > 0) {
+    this.ship.currentSpeed -= this.ship.acceleration;
+  }
+}
+
 AI.prototype.shoot = function() {
   if(this.target) {
     let angleToTarget = Math.atan2(this.target.y - this.ship.y, this.target.x - this.ship.x) * 180 / Math.PI;
@@ -58,5 +68,4 @@ AI.prototype.shoot = function() {
       this.ship.shooting(this.ship.shipType);
     }
   }
-
 }

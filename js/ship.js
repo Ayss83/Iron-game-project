@@ -22,7 +22,7 @@ function Ship(type) {
       this.x = 200;
       this.y = 300;
       this.width = 114;
-      this.height = 82;
+      this.height = 55;
       this.degrees = 0;
       this.currentSpeed = 0;
       this.xSpeed = 0;
@@ -33,7 +33,7 @@ function Ship(type) {
       this.steering = 3.4;
       this.acceleration = 0.6;
       this.image = new Image();
-      this.image.src = "./images/ships/drakir.png";
+      this.image.src = "./images/ships/redshipr.png";
       break;
 
     case shipTypes.hestar: 
@@ -99,34 +99,34 @@ Ship.prototype.movement = function() {
 
   if(this.degrees > 90 && this.degrees <= 180) {
     convertedDeg = this.degrees - 90;
-    xPart = (90 - convertedDeg) / 90;
-    yPart = convertedDeg / 90;
+    xPart = convertedDeg / 90;
+    yPart = (90 - convertedDeg) / 90;
     
     this.xSpeed = -this.currentSpeed * xPart;
-    this.ySpeed = -this.currentSpeed * yPart;
+    this.ySpeed = this.currentSpeed * yPart;
 
   } else if (this.degrees > 180 && this.degrees <= 270) {
     convertedDeg = this.degrees - 180;
-    xPart = convertedDeg / 90;
-    yPart = (90 - convertedDeg) / 90;
+    xPart = (90 - convertedDeg) / 90;
+    yPart = convertedDeg / 90;
 
-    this.xSpeed = this.currentSpeed * xPart;
+    this.xSpeed = -this.currentSpeed * xPart;
     this.ySpeed = -this.currentSpeed * yPart;
   
   } else if (this.degrees > 270 && this.degrees <= 360) {
     convertedDeg = this.degrees - 270; 
+    xPart = convertedDeg / 90;
+    yPart = (90 - convertedDeg) / 90;
+
+    this.xSpeed = this.currentSpeed * xPart;
+    this.ySpeed = -this.currentSpeed * yPart;
+   
+  } else {
+    convertedDeg = this.degrees;
     xPart = (90 - convertedDeg) / 90;
     yPart = convertedDeg / 90;
 
     this.xSpeed = this.currentSpeed * xPart;
-    this.ySpeed = this.currentSpeed * yPart;
-   
-  } else {
-    convertedDeg = this.degrees;
-    xPart = convertedDeg / 90;
-    yPart = (90 - convertedDeg) / 90;
-
-    this.xSpeed = -this.currentSpeed * xPart;
     this.ySpeed = this.currentSpeed * yPart;
   }
   this.boundaryBounce();
@@ -154,7 +154,7 @@ Ship.prototype.boundaryBounce = function () {
 
 Ship.prototype.shooting = function(shipType, source) {
   if(shipType === shipTypes.drakir) {
-    gameObjects.push(new Shoot(this.shootType, this.x, this.y, this.degrees, source));
+    gameObjects.push(new Shoot(this.shootType, this.x, this.y, this.degrees-90, source));
   } else if(shipType === shipTypes.terran || shipType === shipTypes.hestar) {
     gameObjects.push(new Shoot(this.shootType, this.x, this.y, this.degrees-90, source));  
   }
