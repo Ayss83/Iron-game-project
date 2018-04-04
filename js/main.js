@@ -4,7 +4,6 @@ const gameObjects = [];
 
 canvas.width = window.innerWidth - 50;
 canvas.height = window.innerHeight - 20;
-
 let player = new Ship(shipTypes.drakir);
 gameObjects.push(player);
 let adversary = new Ship(shipTypes.hestar);
@@ -21,7 +20,7 @@ function refresh() {
     if(element !== player && !(element instanceof Shoot)) {
       element.AI.targeting();
       element.AI.orient();
-      // element.AI.move();
+      element.AI.move();
     }
 
     if(element instanceof Ship && element.HP <= 0) {
@@ -52,7 +51,8 @@ function refresh() {
     }
   });
 
-
+  barBackground();
+  playerLifeBar();
   requestAnimationFrame(() => {
     refresh();
   });

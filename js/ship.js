@@ -19,6 +19,7 @@ function Ship(type) {
   switch(type) {
     case shipTypes.drakir:
       this.HP = 200;
+      this.maxHP = 200;
       this.x = 200;
       this.y = 300;
       this.width = 114;
@@ -38,6 +39,7 @@ function Ship(type) {
 
     case shipTypes.hestar: 
       this.HP = 250;
+      this.maxHP = 250;
       this.x = 600;
       this.y = 270;
       this.width = 114;
@@ -57,6 +59,7 @@ function Ship(type) {
 
       case shipTypes.terran: 
       this.HP = 250;
+      this.maxHP = 250;
       this.x = 850;
       this.y = 300;
       this.width = 114;
@@ -97,37 +100,69 @@ Ship.prototype.movement = function() {
   let xPart;  //percentage of speed allowed to x axis movement
   let yPart;  //percentage of speed allowed to y axis movement
 
-  if(this.degrees > 90 && this.degrees <= 180) {
-    convertedDeg = this.degrees - 90;
-    xPart = convertedDeg / 90;
-    yPart = (90 - convertedDeg) / 90;
-    
-    this.xSpeed = -this.currentSpeed * xPart;
-    this.ySpeed = this.currentSpeed * yPart;
-
-  } else if (this.degrees > 180 && this.degrees <= 270) {
-    convertedDeg = this.degrees - 180;
-    xPart = (90 - convertedDeg) / 90;
-    yPart = convertedDeg / 90;
-
-    this.xSpeed = -this.currentSpeed * xPart;
-    this.ySpeed = -this.currentSpeed * yPart;
+  if(!this.AI) {
+    if(this.degrees > 90 && this.degrees <= 180) {
+      convertedDeg = this.degrees - 90;
+      xPart = convertedDeg / 90;
+      yPart = (90 - convertedDeg) / 90;
+      
+      this.xSpeed = -this.currentSpeed * xPart;
+      this.ySpeed = this.currentSpeed * yPart;
   
-  } else if (this.degrees > 270 && this.degrees <= 360) {
-    convertedDeg = this.degrees - 270; 
-    xPart = convertedDeg / 90;
-    yPart = (90 - convertedDeg) / 90;
-
-    this.xSpeed = this.currentSpeed * xPart;
-    this.ySpeed = -this.currentSpeed * yPart;
-   
+    } else if (this.degrees > 180 && this.degrees <= 270) {
+      convertedDeg = this.degrees - 180;
+      xPart = (90 - convertedDeg) / 90;
+      yPart = convertedDeg / 90;
+  
+      this.xSpeed = -this.currentSpeed * xPart;
+      this.ySpeed = -this.currentSpeed * yPart;
+    
+    } else if (this.degrees > 270 && this.degrees <= 360) {
+      convertedDeg = this.degrees - 270; 
+      xPart = convertedDeg / 90;
+      yPart = (90 - convertedDeg) / 90;
+  
+      this.xSpeed = this.currentSpeed * xPart;
+      this.ySpeed = -this.currentSpeed * yPart;
+     
+    } else {
+      convertedDeg = this.degrees;
+      xPart = (90 - convertedDeg) / 90;
+      yPart = convertedDeg / 90;
+  
+      this.xSpeed = this.currentSpeed * xPart;
+      this.ySpeed = this.currentSpeed * yPart;
+    }
   } else {
-    convertedDeg = this.degrees;
-    xPart = (90 - convertedDeg) / 90;
-    yPart = convertedDeg / 90;
+    if(this.degrees >= 0 && this.degrees < 90) {
+      convertedDeg = this.degrees;
+      xPart = (90 - convertedDeg) / 90;
+      yPart = convertedDeg / 90;
 
-    this.xSpeed = this.currentSpeed * xPart;
-    this.ySpeed = this.currentSpeed * yPart;
+      this.xSpeed = this.currentSpeed * xPart;
+      this.ySpeed = this.currentSpeed * yPart;
+    } else if(this.degrees >= 90 && this.degrees <= 180) {
+      convertedDeg = this.degrees - 90;
+      xPart = convertedDeg / 90;
+      yPart = (90 - convertedDeg) / 90;
+
+      this.xSpeed = -this.currentSpeed * xPart;
+      this.ySpeed = this.currentSpeed * yPart;
+    } else if(this.degrees < 0 && this.degrees >= -90) {
+      convertedDeg = this.degrees + 90;
+      xPart = convertedDeg / 90;
+      yPart = (90 - convertedDeg) / 90;
+
+      this.xSpeed = this.currentSpeed * xPart;
+      this.ySpeed = -this.currentSpeed * yPart;
+    } else {
+      convertedDeg = this.degrees + 180;
+      xPart = (90 - convertedDeg) / 90;
+      yPart = convertedDeg / 90;
+
+      this.xSpeed = -this.currentSpeed * xPart;
+      this.ySpeed = -this.currentSpeed * yPart;
+    }
   }
   this.boundaryBounce();
   this.x += this.xSpeed;
