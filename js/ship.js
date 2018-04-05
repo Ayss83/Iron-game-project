@@ -14,14 +14,16 @@ const shootTypes = Object.freeze({
  * Constructor function to create ships
  * 
  * @param {object} type type of ship (shipTypes), ship's caracteritics will depend on this
+ * @param {number} x x coordinate for the ship to be spawned at
+ * @param {number} y y coordinate for the ship to be spawned at
  */
-function Ship(type) {
+function Ship(type, x, y) {
   switch(type) {
     case shipTypes.drakir:
       this.HP = 200;
       this.maxHP = 200;
-      this.x = 200;
-      this.y = 300;
+      this.x = x;
+      this.y = y;
       this.width = 114;
       this.height = 55;
       this.degrees = 0;
@@ -38,20 +40,20 @@ function Ship(type) {
       break;
 
     case shipTypes.hestar: 
-      this.HP = 250;
-      this.maxHP = 250;
-      this.x = 600;
-      this.y = 270;
+      this.HP = 300;
+      this.maxHP = 300;
+      this.x = x;
+      this.y = y;
       this.width = 114;
       this.height = 86;
       this.degrees = 0;
-      this.maxSpeed = 6;
+      this.maxSpeed = 4;
       this.currentSpeed = 0;
       this.xSpeed = 0;
       this.ySpeed = 0;
       this.shipType = shipTypes.hestar;
       this.shootType = shootTypes.red;
-      this.steering = 0.8;
+      this.steering = 1.25;
       this.acceleration = 3;
       this.image = new Image();
       this.image.src = "./images/ships/hestar.png";
@@ -60,18 +62,18 @@ function Ship(type) {
       case shipTypes.terran: 
       this.HP = 250;
       this.maxHP = 250;
-      this.x = 850;
-      this.y = 300;
+      this.x = x;
+      this.y = y;
       this.width = 114;
       this.height = 84;
       this.degrees = 0;
-      this.maxSpeed = 6.5;
+      this.maxSpeed = 4.5;
       this.currentSpeed = 0;
       this.xSpeed = 0;
       this.ySpeed = 0;
       this.shipType = shipTypes.terran;
       this.shootType = shootTypes.green;
-      this.steering = 0.8;
+      this.steering = 1.25;
       this.acceleration = 3;
       this.image = new Image();
       this.image.src = "./images/ships/terran.png";
@@ -193,4 +195,14 @@ Ship.prototype.shooting = function(shipType, source) {
   } else if(shipType === shipTypes.terran || shipType === shipTypes.hestar) {
     gameObjects.push(new Shoot(this.shootType, this.x, this.y, this.degrees-90, source, this));  
   }
+}
+
+Ship.prototype.collision = function(ship) {
+  if(this.y + this.height >= ship.y && 
+    this.y <= ship.y + ship.height && 
+    this.x + this.width >= ship.x &&
+    this.x <= ship.x + ship.width) {
+      this.currentSpeed -= 5;
+      ship.currentSpeed -= 5;
+    }
 }

@@ -3,7 +3,6 @@ function AI(ship) {
   this.target = null;
 }
 
-
 AI.prototype.targeting = function() {
   const possibleTargets = [];
   let closestTargetDist;
@@ -28,6 +27,10 @@ AI.prototype.targeting = function() {
     });
     
     this.target = closestTarget;
+  }
+
+  if(this.target.HP <= 0) {
+    this.target = null;
   }
 }
 
@@ -61,11 +64,41 @@ AI.prototype.move = function() {
 }
 
 AI.prototype.shoot = function() {
-  if(this.target) {
+  if(this.target.HP > 0) {
     let angleToTarget = Math.atan2(this.target.y - this.ship.y, this.target.x - this.ship.x) * 180 / Math.PI;
 
     if((angleToTarget < this.ship.degrees + 10) && (angleToTarget > this.ship.degrees - 10)) {
       this.ship.shooting(this.ship.shipType);
     }
   }
+}
+
+AI.prototype.avoid = function() {
+  const angleTowardSelf = Math.atan2(this.ship.y - this.target.y, this.ship.x - this.target.x) * 180 / Math.PI;
+  let correctedAngle;
+
+  // Adjustment if the target is the player ship since it has a 0°/360° basis instead of -180°/180° one
+  if(this.target === player) {
+    if(this.target.degrees > 180) {
+      correctedAngle = this.target.degrees - 360;
+    } else {
+      correctedAngle = this.target.degrees;
+    }
+  } else {
+    correctedAngle = this.target.degrees;
+  }
+
+  if(angleTowardSelf > correctedAngle - 10 && angleTowardSelf < correctedAngle + 10) {
+    console.log("Je suis dans la ligne de mire de ma cible, je dois bouger");
+    this.ship.degrees += this.ship.steering;
+    if(this.ship.currentSpeed < this.ship.maxSpeed) {
+      this.ship.currentSpeed += this.ship.acceleration;
+    } else {
+      this.ship.currentSpeed = this.ship.maxSpeed;
+    }
+
+    return true;
+  }
+
+  return false;
 }

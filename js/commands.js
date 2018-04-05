@@ -1,6 +1,7 @@
 var body = document.querySelector("body");
 
 body.onkeydown = function() {
+  console.log(event.keyCode);
   switch(event.keyCode) {
     case 90: // Z key
     case 87: // W key for qwerty keyboards
