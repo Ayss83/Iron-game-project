@@ -13,7 +13,7 @@ body.onkeydown = function() {
     if(!keysPressed.includes(event.keyCode)) {
       keysPressed.push(event.keyCode);
     }
-    
+    //
   }
 }
 
