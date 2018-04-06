@@ -1,4 +1,5 @@
 var body = document.querySelector("body");
+const keysPressed = [];
 
 body.onkeydown = function() {
   if(currentPhase === gamePhases.start) {
@@ -9,8 +10,30 @@ body.onkeydown = function() {
         break;
     }
   } else if(currentPhase === gamePhases.play) {
+    if(!keysPressed.includes(event.keyCode)) {
+      keysPressed.push(event.keyCode);
+    }
+    
+  }
+}
 
+body.onkeyup = function() {
+  if(keysPressed.includes(event.keyCode)) {
+    keysPressed.splice(keysPressed.indexOf(event.keyCode), 1);
+  }
+  if(currentPhase === gamePhases.play) {
     switch(event.keyCode) {
+      case 13:
+        player.shooting(player.shipType, "player");
+        break;
+    }
+  }
+}
+
+setInterval(() => {
+  keysPressed.forEach(key => {
+
+    switch(key) {
       case 90: // Z key
       case 87: // W key for qwerty keyboards
         if(player.currentSpeed + player.acceleration < player.maxSpeed) {
@@ -45,13 +68,5 @@ body.onkeydown = function() {
         }
         break;
     }
-  }
-  
-  body.onkeyup = function() {
-    switch(event.keyCode) {
-      case 13:
-        player.shooting(player.shipType, "player");
-        break;
-    }
-  }
-}
+  });
+}, 35);

@@ -25,8 +25,10 @@ function won() {
   ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
   ctx.fillRect(0,0,canvas.width, canvas.height);
   ctx.fillStyle = "#fff";
-  ctx.font = "180px calibri";
-  ctx.fillText("Congratulations!", 130, 470);
+  ctx.font = "160px calibri";
+  var text = "Congratulations!";
+  var textWidth = ctx.measureText(text).width;
+  ctx.fillText(text, canvas.width / 2 - textWidth / 2, 480);
 }
 
 /**
@@ -36,8 +38,10 @@ function gameOver() {
   ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
   ctx.fillRect(0,0,canvas.width, canvas.height);
   ctx.fillStyle = "#fff";
-  ctx.font = "180px calibri";
-  ctx.fillText("Game Over...", 280, 470);
+  ctx.font = "160px calibri";
+  var text = "Game Over...";
+  var textWidth = ctx.measureText(text).width;
+  ctx.fillText(text, canvas.width / 2 - textWidth / 2, 480);
 }
 
 /**

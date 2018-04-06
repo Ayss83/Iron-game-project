@@ -7,14 +7,15 @@ const gamePhases = Object.freeze({
   gameOver: 4,
   win: 5,
 });
-const gameObjects = [];
-const startingXPos = [];
-const startingYPos = [];
+const gameObjects = [];  // array for every object in game scene
+const startingXPos = []; // array keeping starting x positions of ships
+const startingYPos = []; // array keeping starting y positions of ships
 let currentPhase = gamePhases.play;
 let loop = true;
 let currentAlpha = 1;
 
 //blinking rate for subtext on title screen
+/* 
 setInterval(() => {
   if(loop) {
     currentAlpha -= 0.1;
@@ -30,15 +31,16 @@ setInterval(() => {
     currentAlpha = 1;
   }
 }, 1000/15);
+*/
 
 canvas.width = window.innerWidth - 50;
 canvas.height = window.innerHeight - 20;
-let player = new Ship(shipTypes.drakir, randomCoords("x"), randomCoords("y"));
+let player = new Ship(shipTypes.drakir, randomCoords("x"), randomCoords("y"), randomOrientation());
 gameObjects.push(player);
-let adversary = new Ship(shipTypes.hestar, randomCoords("x"), randomCoords("y"));
+let adversary = new Ship(shipTypes.hestar, randomCoords("x"), randomCoords("y"), randomOrientation("AI"));
 adversary.AI = new AI(adversary);
 gameObjects.push(adversary);
-let adversary2 = new Ship(shipTypes.terran, randomCoords("x"), randomCoords("y"));
+let adversary2 = new Ship(shipTypes.terran, randomCoords("x"), randomCoords("y"), randomOrientation("AI"));
 adversary2.AI = new AI(adversary2);
 gameObjects.push(adversary2);
 
@@ -48,12 +50,13 @@ function randomCoords(axis) {
     let isUnique = false;
 
     function choosePos() {
-      testedPos = Math.ceil(Math.random() * (canvas.width - 114) + 50);
+      testedPos = Math.ceil(Math.random() * (canvas.width - 114));
     }
+
     while(!isUnique) {
       choosePos();
       startingXPos.forEach(coord => {
-        if(testedPos > coord - 120 && testedPos < coord + 120) {
+        if(testedPos > coord - 220 && testedPos < coord + 220) {
           isUnique = false;
         } else {
           isUnique = true;
@@ -69,13 +72,13 @@ function randomCoords(axis) {
     let isUnique = false;
 
     function choosePos() {
-      testedPos = Math.ceil(Math.random() * (canvas.height - 114) + 50);
+      testedPos = Math.ceil(Math.random() * (canvas.height - 114));
     }
 
     while(!isUnique) {
       choosePos();
       startingYPos.forEach(coord => {
-        if(testedPos > coord - 120 && testedPos < coord + 120) {
+        if(testedPos > coord - 220 && testedPos < coord + 220) {
           isUnique = false;
         } else {
           isUnique = true;
@@ -87,6 +90,16 @@ function randomCoords(axis) {
     return testedPos;
     
   }
+}
+
+function randomOrientation(AI) {
+  let orientation = Math.floor(Math.random() * 361);
+
+  if(AI && orientation > 180) {
+    orientation -= 360;
+  }
+
+  return orientation;
 }
 
 setInterval(function() {
@@ -174,6 +187,7 @@ function refresh() {
     }
   });
 
+  // call of function to test collisions between ships
   shipsInGame.forEach(ship1 => {
     shipsInGame.forEach(ship2 => {
       if(ship1 !== ship2) {
@@ -189,10 +203,12 @@ function refresh() {
     thrustBar();
   }
 
+  //winning condition
   if(shipsInGame.length === 1 && shipsInGame[0] === player) {
     won();
   }
   
+  // gameover condition
   if(!shipsInGame.includes(player)) {
     gameOver();
   }

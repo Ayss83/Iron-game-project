@@ -17,7 +17,7 @@ const shootTypes = Object.freeze({
  * @param {number} x x coordinate for the ship to be spawned at
  * @param {number} y y coordinate for the ship to be spawned at
  */
-function Ship(type, x, y) {
+function Ship(type, x, y, orientation) {
   switch(type) {
     case shipTypes.drakir:
       this.HP = 200;
@@ -26,14 +26,14 @@ function Ship(type, x, y) {
       this.y = y;
       this.width = 114;
       this.height = 55;
-      this.degrees = 0;
+      this.degrees = orientation;
       this.currentSpeed = 0;
       this.xSpeed = 0;
       this.ySpeed = 0;
       this.maxSpeed = 7;
       this.shipType = shipTypes.drakir;
       this.shootType = shootTypes.blue;
-      this.steering = 3.4;
+      this.steering = 3.9;
       this.acceleration = 0.6;
       this.image = new Image();
       this.image.src = "./images/ships/redshipr.png";
@@ -46,7 +46,7 @@ function Ship(type, x, y) {
       this.y = y;
       this.width = 114;
       this.height = 86;
-      this.degrees = 0;
+      this.degrees = orientation;
       this.maxSpeed = 4;
       this.currentSpeed = 0;
       this.xSpeed = 0;
@@ -66,8 +66,8 @@ function Ship(type, x, y) {
       this.y = y;
       this.width = 114;
       this.height = 84;
-      this.degrees = 0;
-      this.maxSpeed = 4.5;
+      this.degrees = orientation;
+      this.maxSpeed = 4;
       this.currentSpeed = 0;
       this.xSpeed = 0;
       this.ySpeed = 0;
@@ -202,7 +202,11 @@ Ship.prototype.collision = function(ship) {
     this.y <= ship.y + ship.height && 
     this.x + this.width >= ship.x &&
     this.x <= ship.x + ship.width) {
-      this.currentSpeed -= 5;
-      ship.currentSpeed -= 5;
+      if(this.currentSpeed >= 0) {
+        this.currentSpeed -= 5;
+      }
+      if(ship.currentSpeed >= 0) {
+        ship.currentSpeed -= 5;
+      }
     }
 }
