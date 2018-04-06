@@ -1,6 +1,35 @@
 const canvas = document.querySelector(".first-canvas");
 const ctx = canvas.getContext("2d");
+const gamePhases = Object.freeze({
+  start: 1,
+  select: 2,
+  play: 3,
+  gameOver: 4,
+  win: 5,
+});
 const gameObjects = [];
+const startingXPos = [];
+const startingYPos = [];
+let currentPhase = gamePhases.play;
+let loop = true;
+let currentAlpha = 1;
+
+//blinking rate for subtext on title screen
+setInterval(() => {
+  if(loop) {
+    currentAlpha -= 0.1;
+  } else {
+    currentAlpha += 0.1;
+  }
+
+  if(currentAlpha < 0) {
+    loop = false;
+    currentAlpha = 0;
+  } else if (currentAlpha >= 1) {
+    loop = true;
+    currentAlpha = 1;
+  }
+}, 1000/15);
 
 canvas.width = window.innerWidth - 50;
 canvas.height = window.innerHeight - 20;
@@ -15,9 +44,48 @@ gameObjects.push(adversary2);
 
 function randomCoords(axis) {
   if (axis = "x") {
-    return Math.ceil(Math.random() * (canvas.width - 114) + 50);
+    let testedPos;
+    let isUnique = false;
+
+    function choosePos() {
+      testedPos = Math.ceil(Math.random() * (canvas.width - 114) + 50);
+    }
+    while(!isUnique) {
+      choosePos();
+      startingXPos.forEach(coord => {
+        if(testedPos > coord - 120 && testedPos < coord + 120) {
+          isUnique = false;
+        } else {
+          isUnique = true;
+        }
+      });
+      isUnique = true;
+    }
+    startingXPos.push(testedPos);
+    return testedPos;
+
   } else if(axis = "y") {
-    return Math.ceil(Math.random() * (canvas.height - 114) - 50);
+    let testedPos;
+    let isUnique = false;
+
+    function choosePos() {
+      testedPos = Math.ceil(Math.random() * (canvas.height - 114) + 50);
+    }
+
+    while(!isUnique) {
+      choosePos();
+      startingYPos.forEach(coord => {
+        if(testedPos > coord - 120 && testedPos < coord + 120) {
+          isUnique = false;
+        } else {
+          isUnique = true;
+        }
+      });
+      isUnique = true;
+    }
+    startingYPos.push(testedPos);
+    return testedPos;
+    
   }
 }
 
@@ -29,7 +97,37 @@ setInterval(function() {
   });
 }, 17);
 
+if(currentPhase === gamePhases.start) {
+  setInterval(() => {
+    startScreen();
+  }, 1000/25)
+} else if(currentPhase === gamePhases.play) {
+  refresh();
+
+  setInterval(function() {
+    gameObjects.forEach((element, index) => {
+      if(element !== player && !(element instanceof Shoot)) {
+        element.AI.shoot();
+      }
+  
+      if(element instanceof Ship) {
+        if(element.currentSpeed < 0) {
+          element.currentSpeed += 0.5;
+        }
+      }
+  })
+  }, 500);
+} else if(currentPhase === gamePhases.select) {
+  setInterval(() => {
+    selectScreen();
+  }, 1000/25);
+}
+
 function refresh() {
+  if(canvas.style.backgroundImage !== "url('./images/background/back.png')") {
+    canvas.style.backgroundImage = "url('./images/background/back.png')";
+  }
+
   const shipsInGame = [];
   ctx.clearRect(0,0, canvas.width, canvas.height);
 
@@ -104,18 +202,3 @@ function refresh() {
   });
 }
 
-refresh();
-
-setInterval(function() {
-  gameObjects.forEach((element, index) => {
-    if(element !== player && !(element instanceof Shoot)) {
-      element.AI.shoot();
-    }
-
-    if(element instanceof Ship) {
-      if(element.currentSpeed < 0) {
-        element.currentSpeed += 0.5;
-      }
-    }
-})
-}, 500);

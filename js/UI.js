@@ -62,3 +62,49 @@ function thrustBar() {
     ctx.fillRect(canvas.width - 499, 66, 448 * thrustPercent, 23);
   }
 }
+
+/**
+ * Start screen (title, text and background)
+ */
+function startScreen() {
+  if(canvas.style.backgroundImage !== "url('./images/background/startBack.jpg')") {
+    canvas.style.backgroundImage = "url('./images/background/startBack.jpg')";
+  }
+  ctx.clearRect(0,0,canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
+  ctx.fillRect(0,0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(255, 255, 255, 1";
+  ctx.font = "180px serif";
+  const titleText = "Space Shooter";
+  const titleTextWidth = ctx.measureText(titleText).width;
+  ctx.fillText(titleText, canvas.width/2 - titleTextWidth/2, canvas.height / 2.5 + 45);
+
+  ctx.fillStyle = "rgba(255, 255, 255, " + currentAlpha + ")";
+  ctx.font = "25px calibri";
+  const text = "Press start button (enter key will do)";
+  const textWidth = ctx.measureText(text).width;
+  ctx.fillText(text, canvas.width/2 - textWidth/2, canvas.height / 1.5);
+
+}
+
+function selectScreen() {
+  if(canvas.style.backgroundImage !== "url('./images/background/startBack.jpg')") {
+    canvas.style.backgroundImage = "url('./images/background/startBack.jpg')";
+  }
+  ctx.clearRect(0,0,canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
+  ctx.fillRect(0,0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(255, 255, 255, 1";
+  ctx.font = "180px serif";
+  const titleText = "Space Shooter";
+  const titleTextWidth = ctx.measureText(titleText).width;
+  ctx.fillText(titleText, canvas.width/2 - titleTextWidth/2, canvas.height / 2.5 + 45);
+
+  ctx.font = "35px calibri";
+  const option1Text = "1 player";
+  const option1Width = ctx.measureText(option1Text).width;
+  ctx.fillText(option1Text, canvas.width / 2 - option1Width - 50, canvas.height / 1.7);
+  const option2Text = "2 players";
+  const options2Width = ctx.measureText(option2Text).width;
+  ctx.fillText(option2Text, canvas.width / 2 - options2Width + 220, canvas.height / 1.7);
+}
